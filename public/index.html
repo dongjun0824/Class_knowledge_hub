@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Knowledge Hub</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="logo">CKH</div>
+        <div>
+          <h1>Class Knowledge Hub</h1>
+        </div>
+      </div>
+
+      <nav class="nav-actions">
+        <button id="btnHome" class="ghost-btn">홈</button>
+        <button id="btnBoard" class="ghost-btn">게시판</button>
+        <button id="btnAdmin" class="ghost-btn admin-only hidden">관리자</button>
+      </nav>
+
+      <div class="auth-panel">
+        <div id="userSummary" class="user-summary hidden"></div>
+        <button id="btnLogout" class="danger-btn hidden">로그아웃</button>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <aside class="left-panel">
+        <section class="card auth-card">
+          <h2>로그인 / 회원가입</h2>
+
+          <form id="loginForm">
+            <label>닉네임
+              <input name="nickname" maxlength="30" required />
+            </label>
+            <label>비밀번호
+              <input name="password" type="password" minlength="6" required />
+            </label>
+            <button type="submit" class="primary-btn">로그인</button>
+          </form>
+
+          <form id="registerForm" class="top-space">
+            <label>닉네임
+              <input name="nickname" maxlength="30" required />
+            </label>
+            <label>비밀번호
+              <input name="password" type="password" minlength="6" required />
+            </label>
+            <button type="submit" class="secondary-btn">회원가입</button>
+          </form>
+        </section>
+
+        <section class="card create-post-card">
+          <h2>게시물 작성</h2>
+          <form id="postForm">
+            <label>제목
+              <input name="title" maxlength="200" required />
+            </label>
+
+            <label>교과목
+              <select name="subject_id" id="subjectSelect" required></select>
+            </label>
+
+            <label>단원
+              <select name="unit_id" id="unitSelect"></select>
+            </label>
+
+            <label>유형
+              <select name="type" required>
+                <option value="concept">개념 정리</option>
+                <option value="question">문제</option>
+                <option value="note">비법 노트</option>
+                <option value="wrong">오답 정리</option>
+              </select>
+            </label>
+
+            <label>난이도
+              <select name="difficulty">
+                <option value="하">하</option>
+                <option value="중" selected>중</option>
+                <option value="상">상</option>
+              </select>
+            </label>
+
+            <label>필수 레벨
+              <select name="required_level">
+                <option value="1">Lv.1</option>
+                <option value="2">Lv.2</option>
+                <option value="3">Lv.3</option>
+                <option value="4">Lv.4</option>
+              </select>
+            </label>
+
+            <label>내용
+              <textarea name="content" rows="5" required></textarea>
+            </label>
+
+            <label>정답 (문제일 경우)
+              <textarea name="answer" rows="3"></textarea>
+            </label>
+
+            <label>해설
+              <textarea name="explanation" rows="4"></textarea>
+            </label>
+
+            <button type="submit" class="primary-btn">게시글 등록</button>
+          </form>
+        </section>
+      </aside>
+
+      <section class="content-panel">
+        <section class="card filter-card">
+          <h2>검색 / 필터</h2>
+          <form id="filterForm" class="filter-grid">
+            <input name="q" type="text" placeholder="검색 키워드" />
+            <select name="subject_id" id="filterSubjectSelect">
+              <option value="">전체 교과</option>
+            </select>
+            <select name="unit_id" id="filterUnitSelect">
+              <option value="">전체 단원</option>
+            </select>
+            <select name="type">
+              <option value="">전체 유형</option>
+              <option value="concept">개념 정리</option>
+              <option value="question">문제</option>
+              <option value="note">비법 노트</option>
+              <option value="wrong">오답 정리</option>
+            </select>
+            <select name="difficulty">
+              <option value="">전체 난이도</option>
+              <option value="하">하</option>
+              <option value="중">중</option>
+              <option value="상">상</option>
+            </select>
+            <select name="sort">
+              <option value="latest">최신순</option>
+              <option value="likes">좋아요순</option>
+            </select>
+            <button type="submit" class="secondary-btn">검색</button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>지식 게시판</h2>
+          <div id="postsContainer" class="posts-container"></div>
+        </section>
+      </section>
+
+      <aside class="right-panel">
+        <section class="card user-panel">
+          <h2>내 정보</h2>
+          <div id="myInfo">로그인 후 확인 가능합니다.</div>
+        </section>
+
+        <section class="card admin-panel hidden">
+          <h2>관리자 대시보드</h2>
+
+          <div class="admin-section">
+            <h3>교과목 추가</h3>
+            <form id="subjectAdminForm">
+              <input name="name" placeholder="교과목명" required />
+              <textarea name="description" rows="2" placeholder="설명"></textarea>
+              <button type="submit">추가</button>
+            </form>
+          </div>
+
+          <div class="admin-section">
+            <h3>단원 추가</h3>
+            <form id="unitAdminForm">
+              <select name="subject_id" id="adminSubjectSelect" required></select>
+              <input name="name" placeholder="단원명" required />
+              <button type="submit">추가</button>
+            </form>
+          </div>
+
+          <div class="admin-section">
+            <h3>포인트 정책</h3>
+            <form id="policyForm">
+              <input name="concept" placeholder="개념 정리 포인트" />
+              <input name="question_easy" placeholder="문제(하) 포인트" />
+              <input name="question_medium" placeholder="문제(중) 포인트" />
+              <input name="question_hard" placeholder="문제(상) 포인트" />
+              <input name="note" placeholder="비법노트 포인트" />
+              <input name="comment" placeholder="댓글 포인트" />
+              <input name="like" placeholder="좋아요 포인트" />
+              <input name="daily_point_cap" placeholder="일일 포인트 한도" />
+              <input name="daily_like_limit" placeholder="일일 좋아요 한도" />
+              <input name="daily_comment_limit" placeholder="일일 댓글 한도" />
+              <button type="submit">정책 저장</button>
+            </form>
+          </div>
+
+          <div class="admin-section">
+            <h3>사용자 관리</h3>
+            <div id="adminUsersList"></div>
+          </div>
+
+          <div class="admin-section">
+            <h3>신고 목록</h3>
+            <div id="adminReportsList"></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
